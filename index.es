@@ -12,7 +12,7 @@ export class reactClass extends Component {
 					<InputGroup id="chat-input">
 						<FormControl componentClass="input" type="text" placeholder="input" />
 						<InputGroup.Button>
-							<Button>Send</Button>
+							<Button><i className="fa fa-comment" /></Button>
 						</InputGroup.Button>
 					</InputGroup>
 				</FormGroup>
