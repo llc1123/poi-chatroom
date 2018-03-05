@@ -1,18 +1,20 @@
 {
-  "name": "poi-chatroom",
+  "name": "poi-plugin-chatroom",
   "version": "1.0.0",
   "description": "a plugin for chat in poi",
   "main": "index.es",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/llc1123/poi-chatroom.git"
+  },
   "author": {
     "name": "llc1123",
     "link": "https://github.com/llc1123"
   },
   "license": "MIT",
-  "dependencies": {},
   "poiPlugin": {
     "title": "Chatroom",
     "description": "Chatroom",
-    "icon": "fa/comments",
-    "priority": 8
+    "icon": "fa/comments"
   }
 }
