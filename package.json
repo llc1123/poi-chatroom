@@ -8,13 +8,13 @@
     "url": "git+https://github.com/llc1123/poi-chatroom.git"
   },
   "author": {
-    "name": "llc1123",
-    "link": "https://github.com/llc1123"
+    "name": "粒粒橙",
+    "links": "https://github.com/llc1123"
   },
   "license": "MIT",
   "poiPlugin": {
     "title": "Chatroom",
-    "description": "Chatroom",
+    "description": "Chatroom Description",
     "icon": "fa/comments"
   }
 }
