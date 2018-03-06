@@ -15,7 +15,6 @@
 	overflow-y: scroll;
 	resize: none;
 	flex: 1;
-
 }
 
 .message {
@@ -27,4 +26,5 @@
 
 .message .panel-body {
 	padding: 5px;
+	word-break: break-all;
 }

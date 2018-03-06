@@ -6,34 +6,23 @@ export class reactClass extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			messages: [
-				{
-					content: "test123",
-					sender: "llc",
-					timestamp: 0
-				},
-				{
-					content: "test123",
-					sender: "llc",
-					timestamp: 0
-				}
-			],
+			messages: [],
 			input: "",
-			name: ""
+			name: "You"
 		}
 	}
 
 	sendMessage(){
-		const date = Date.now()
 		const messages = this.state.messages.slice()
-		this.setState({
-			messanges: messages.concat([{
-				content: this.state.input,
-				sender: this.state.name,
-				timestamp: date
-			}]),
-			input: ""
-		})
+		if (this.state.input != ""){
+			this.setState({
+				messages: messages.concat([{
+					content: this.state.input,
+					sender: this.state.name
+				}]),
+				input: ""
+			})
+		}
 	}
 
 	renderMessages(){
@@ -56,7 +45,7 @@ export class reactClass extends Component {
 	renderInput(){
 		return(
 			<InputGroup id="chat-input">
-				<FormControl componentClass="input" type="text" value={this.state.input} onChange={() => this.setState({input: event.target.value})} />
+				<FormControl componentClass="input" type="text" value={this.state.input} onChange={event => this.setState({input: event.target.value})} />
 				<InputGroup.Button>
 					<Button onClick={() => this.sendMessage()}><i className="fa fa-comment" /></Button>
 				</InputGroup.Button>
