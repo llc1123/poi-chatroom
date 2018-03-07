@@ -20,7 +20,7 @@ export const reactClass = connect(
 			messages: [],
 			input: "",
 			username: "",
-			realname: this.props.nickname + '@' + this.props.server,
+			realname: props.nickname + '@' + props.server,
 			login: false,
 			numUsers: 0
 		}
@@ -29,15 +29,13 @@ export const reactClass = connect(
 	componentDidMount(){
 		socket.on('login', (numUsers) => this.setState({login: true, numUsers: numUsers}))
 		socket.on('new message', (data) => {
-			const messages = this.state.messages.slice()
 			this.setState({
-				messages: messages.concat(data)
+				messages: this.state.messages.concat(data)
 			})
 		})
 		socket.on('self message', (data) => {
-			const messages = this.state.messages.slice()
 			this.setState({
-				messages: messages.concat(data)
+				messages: this.state.messages.concat(data)
 			})
 		})
 	}
@@ -49,7 +47,7 @@ export const reactClass = connect(
 	}
 
 	sendMessage(){
-		if (this.state.input != ""){
+		if (this.state.input !== ""){
 			socket.emit('new message', this.state.input)
 			this.setState({input: ""})
 		}
