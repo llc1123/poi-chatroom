@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { join } from 'path-extra'
+import { connect } from 'react-redux'
 import { Button, FormGroup, FormControl, InputGroup, Panel, Label } from 'react-bootstrap'
 import openSocket from 'socket.io-client'
 
@@ -7,14 +8,19 @@ const ipAddress = "localhost"
 const port = 3000
 const socket = openSocket('http://' + ipAddress + ':' + port);
 
-export class reactClass extends Component {
+export const reactClass = connect(
+  (state, props) => ({
+    nickname: state.info.basic.api_nickname,
+    server: state.info.server.name
+  })
+)(class Chatroom extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
 			messages: [],
 			input: "",
 			username: "",
-			realname: "realname",
+			realname: this.props.nickname + '@' + this.props.server,
 			login: false,
 			numUsers: 0
 		}
@@ -71,7 +77,7 @@ export class reactClass extends Component {
 			<Panel className="self-message">
 			    <Panel.Body>
 			    	{data.message}
-			    	&nbsp; &nbsp;<Label>{shortTime}</Label>
+			    	&nbsp; &nbsp;<Label className="shortTime">{shortTime}</Label>
 			    </Panel.Body>
 			</Panel>
 		)
@@ -85,7 +91,7 @@ export class reactClass extends Component {
 			    <Panel.Body>
 			    	<span className={data.trusted === 'trusted' ? 'trusted' : 'untrusted'}>{data.username}: </span>
 			    	{data.message}
-			    	&nbsp; &nbsp;<Label>{shortTime}</Label>
+			    	&nbsp; &nbsp;<Label className="shortTime">{shortTime}</Label>
 			    </Panel.Body>
 			</Panel>
 		)
@@ -94,7 +100,7 @@ export class reactClass extends Component {
 	renderInput(){
 		return(
 			<InputGroup id="chat-input">
-				<FormControl componentClass="input" type="text" value={this.state.input} onChange={event => this.setState({input: event.target.value})} />
+				<FormControl type="text" value={this.state.input} onChange={event => this.setState({input: event.target.value})} />
 				<InputGroup.Button>
 					<Button type="submit" onClick={() => this.sendMessage()}><i className="fa fa-comment" /></Button>
 				</InputGroup.Button>
@@ -131,4 +137,4 @@ export class reactClass extends Component {
 			</form>
 		)
 	}
-}
+})

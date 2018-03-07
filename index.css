@@ -30,14 +30,14 @@
 }
 
 .message {
-	margin: 5px 0 5px 0;
+	margin: 5px 100px 5px 0;
 	display:inline-block;
 	clear:both;
     float:left;
 }
 
 .self-message {
-	margin: 5px 0 5px 0;
+	margin: 5px 0 5px 100px;
 	display:inline-block;
 	clear:both;
     float:right;
@@ -50,9 +50,13 @@
 }
 
 .message .panel-body .trusted {
-	/*color: blue*/
+	color: green;
 }
 
 .message .panel-body .untrusted {
-	color: red
+	color: orange;
+}
+
+.shortTime {
+	float: right;
 }
