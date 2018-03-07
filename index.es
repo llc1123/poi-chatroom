@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { join } from 'path-extra'
-import { Button, FormGroup, FormControl, InputGroup, Panel } from 'react-bootstrap'
+import { Button, FormGroup, FormControl, InputGroup, Panel, Label } from 'react-bootstrap'
+import openSocket from 'socket.io-client'
+
+const ipAddress = "localhost"
+const port = 3000
+const socket = openSocket('http://' + ipAddress + ':' + port);
 
 export class reactClass extends Component {
 	constructor(props){
@@ -8,59 +13,121 @@ export class reactClass extends Component {
 		this.state = {
 			messages: [],
 			input: "",
-			name: "You"
+			username: "",
+			realname: "realname",
+			login: false,
+			numUsers: 0
 		}
 	}
 
-	sendMessage(){
-		const messages = this.state.messages.slice()
-		if (this.state.input != ""){
+	componentDidMount(){
+		socket.on('login', (numUsers) => this.setState({login: true, numUsers: numUsers}))
+		socket.on('new message', (data) => {
+			const messages = this.state.messages.slice()
 			this.setState({
-				messages: messages.concat([{
-					content: this.state.input,
-					sender: this.state.name
-				}]),
-				input: ""
+				messages: messages.concat(data)
 			})
+		})
+		socket.on('self message', (data) => {
+			const messages = this.state.messages.slice()
+			this.setState({
+				messages: messages.concat(data)
+			})
+		})
+	}
+
+	componentWillUnmount(){
+		socket.off('login')
+		socket.off('new message')
+		socket.off('self message')
+	}
+
+	sendMessage(){
+		if (this.state.input != ""){
+			socket.emit('new message', this.state.input)
+			this.setState({input: ""})
 		}
+	}
+
+	handleLogin(){
+		socket.emit('add user', {
+			name: this.state.username ? this.state.username : this.state.realname,
+			real: this.state.username ? false : true
+		})
 	}
 
 	renderMessages(){
 		return(
 			<div id="chat-text">
-				{this.state.messages.map((i) => this.renderMessage(i))}
+				{this.state.messages.map((i) => i.trusted === "self" ? this.renderSelfMessage(i) : this.renderMessage(i))}
 			</div>
 		)
 	}
 
-	renderMessage(message){
+	renderSelfMessage(data){
+		const d = new Date(data.timestamp)
+		const shortTime = d.getHours() + ':' + ("0" + d.getMinutes()).substr(-2)
 		return(
-			<Panel className="message">
-			    <Panel.Body>{message.content}</Panel.Body>
+			<Panel className="self-message">
+			    <Panel.Body>
+			    	{data.message}
+			    	&nbsp; &nbsp;<Label>{shortTime}</Label>
+			    </Panel.Body>
 			</Panel>
 		)
 	}
 
+	renderMessage(data){
+		const d = new Date(data.timestamp)
+		const shortTime = d.getHours() + ':' + ("0" + d.getMinutes()).substr(-2)
+		return(
+			<Panel className="message">
+			    <Panel.Body>
+			    	<span className={data.trusted === 'trusted' ? 'trusted' : 'untrusted'}>{data.username}: </span>
+			    	{data.message}
+			    	&nbsp; &nbsp;<Label>{shortTime}</Label>
+			    </Panel.Body>
+			</Panel>
+		)
+	}
 
 	renderInput(){
 		return(
 			<InputGroup id="chat-input">
 				<FormControl componentClass="input" type="text" value={this.state.input} onChange={event => this.setState({input: event.target.value})} />
 				<InputGroup.Button>
-					<Button onClick={() => this.sendMessage()}><i className="fa fa-comment" /></Button>
+					<Button type="submit" onClick={() => this.sendMessage()}><i className="fa fa-comment" /></Button>
 				</InputGroup.Button>
 			</InputGroup>
 		)
 	}
 
+	renderChat(){
+		return(
+			<FormGroup id="chatroom-form">
+				{this.renderMessages()}
+				{this.renderInput()}
+			</FormGroup>
+		)
+	}
+
+	renderLogin(){
+		return(
+			<FormGroup id="chatroom-login">
+				<FormControl componentClass="input" type="text" 
+					value={this.state.username} 
+					onChange={event => this.setState({username: event.target.value})} 
+					placeholder={this.state.realname} />
+				<Button type="submit" onClick={() => this.handleLogin()}><i className="fa fa-comment" /></Button>
+			</FormGroup>
+		)
+	}
+
 	render(){
-		return (
+		return(
 			<form id="chatroom" className="chatroom">
 			<link rel="stylesheet" href={join(__dirname, 'index.css')} />
-				<FormGroup id="chatroom-form">
-					{this.renderMessages()}
-					{this.renderInput()}
-				</FormGroup>
+				{this.state.login ? this.renderChat() : this.renderLogin()}
 			</form>
 		)
 	}

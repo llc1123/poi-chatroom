@@ -16,5 +16,8 @@
     "title": "Chatroom",
     "description": "Chatroom Description",
     "icon": "fa/comments"
+  },
+  "dependencies": {
+    "socket.io-client": "^2.0.4"
   }
 }

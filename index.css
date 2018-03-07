@@ -10,6 +10,18 @@
 	flex-direction: column;
 }
 
+#chatroom-login {
+	position: absolute;
+	width: 80%;
+	margin: 0 10% 0 10%;
+	top: 30%;
+}
+
+#chatroom-login button {
+	width: 60%;
+	margin: 50px 20% 0 20%;
+}
+
 #chat-text {
 	border: none;
 	overflow-y: scroll;
@@ -24,7 +36,23 @@
     float:left;
 }
 
-.message .panel-body {
+.self-message {
+	margin: 5px 0 5px 0;
+	display:inline-block;
+	clear:both;
+    float:right;
+}
+
+.message .panel-body,
+.self-message .panel-body {
 	padding: 5px;
 	word-break: break-all;
+}
+
+.message .panel-body .trusted {
+	/*color: blue*/
+}
+
+.message .panel-body .untrusted {
+	color: red
 }
