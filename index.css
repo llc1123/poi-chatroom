@@ -31,14 +31,14 @@
 
 .message {
 	margin: 5px 100px 5px 0;
-	display:inline-block;
+	display:block;
 	clear:both;
     float:left;
 }
 
 .self-message {
 	margin: 5px 0 5px 100px;
-	display:inline-block;
+	display:block;
 	clear:both;
     float:right;
 }
@@ -47,14 +47,6 @@
 .self-message .panel-body {
 	padding: 5px;
 	word-break: break-all;
-}
-
-.message .panel-body .trusted {
-	color: green;
-}
-
-.message .panel-body .untrusted {
-	color: orange;
 }
 
 .shortTime {

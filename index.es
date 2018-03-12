@@ -20,7 +20,7 @@ export const reactClass = connect(
       messages: [],
       input: '',
       username: '',
-      realname: `${props.nickname}@${props.server}`,
+      realname: `${props.nickname}@${props.server}` === 'undefined@null' ? 'Anonymous' : `${props.nickname}@${props.server}`,
       login: false,
       numUsers: 0,
     }
@@ -32,13 +32,16 @@ export const reactClass = connect(
       this.setState({
         messages: this.state.messages.concat(data),
       })
+      this.scrollToBottom()
     })
     socket.on('self message', (data) => {
       this.setState({
         messages: this.state.messages.concat(data),
       })
+      this.scrollToBottom()
     })
   }
+
 
   componentWillUnmount() {
     socket.off('login')
@@ -60,10 +63,15 @@ export const reactClass = connect(
     })
   }
 
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: 'smooth' })
+  }
+
   renderMessages() {
     return (
       <div id="chat-text">
         {this.state.messages.map(i => (i.trusted === 'self' ? this.renderSelfMessage(i) : this.renderMessage(i)))}
+        <div style={{ float: 'left', clear: 'both' }} ref={(el) => { this.messagesEnd = el }} />
       </div>
     )
   }
@@ -75,7 +83,7 @@ export const reactClass = connect(
       <Panel className="self-message">
         <Panel.Body>
           {data.message}
-          <Label className="shortTime">{shortTime}</Label>
+          &nbsp;&nbsp;<Label className="shortTime">{shortTime}</Label>
         </Panel.Body>
       </Panel>
     )
@@ -87,9 +95,9 @@ export const reactClass = connect(
     return (
       <Panel className="message">
         <Panel.Body>
-          <span className={data.trusted === 'trusted' ? 'trusted' : 'untrusted'}>{data.username}: </span>
+          <span className={data.trusted === 'trusted' ? 'text-success' : 'text-warning'}>{data.username}: </span>
           {data.message}
-          <Label className="shortTime">{shortTime}</Label>
+          &nbsp;&nbsp;<Label className="shortTime">{shortTime}</Label>
         </Panel.Body>
       </Panel>
     )
