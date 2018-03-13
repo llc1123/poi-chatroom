@@ -6,9 +6,9 @@ import { connect } from 'react-redux'
 import { Button, FormGroup, FormControl, InputGroup, Panel, Label } from 'react-bootstrap'
 import openSocket from 'socket.io-client'
 
-const ipAddress = 'jp3.llc.moe'
+const host = 'jp3.llc.moe'
 const port = 3000
-const socket = openSocket(`http://${ipAddress}:${port}`)
+const socket = openSocket(`http://${host}:${port}`)
 const { i18n } = window
 const __ = i18n['poi-plugin-chatroom'].__.bind(i18n['poi-plugin-chatroom'])
 
