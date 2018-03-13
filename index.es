@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import React, { Component } from 'react'
 import { join } from 'path-extra'
 import { connect } from 'react-redux'
@@ -7,6 +9,8 @@ import openSocket from 'socket.io-client'
 const ipAddress = 'localhost'
 const port = 3000
 const socket = openSocket(`http://${ipAddress}:${port}`)
+const { i18n } = window
+const __ = i18n['poi-plugin-chatroom'].__.bind(i18n['poi-plugin-chatroom'])
 
 export const reactClass = connect(
   () => (state, props) => ({
@@ -20,7 +24,7 @@ export const reactClass = connect(
       messages: [],
       input: '',
       username: '',
-      realname: `${props.nickname}@${props.server}` === 'undefined@null' ? 'Anonymous' : `${props.nickname}@${props.server}`,
+      realname: `${props.nickname}@${props.server}` === 'undefined@null' ? __('Anonymous') : `${props.nickname}@${props.server}`,
       login: false,
       numUsers: 0,
     }
@@ -133,7 +137,7 @@ export const reactClass = connect(
           onChange={event => this.setState({ username: event.target.value })}
           placeholder={this.state.realname}
         />
-        <Button type="submit" onClick={() => this.handleLogin()}><i className="fa fa-comment" /></Button>
+        <Button type="submit" onClick={() => this.handleLogin()}>{__('Login')}</Button>
       </FormGroup>
     )
   }
@@ -141,7 +145,7 @@ export const reactClass = connect(
   render() {
     return (
       <form id="chatroom" className="chatroom">
-        <link rel="stylesheet" href={join(__dirname, 'index.css')} />
+        <link rel="stylesheet" href={join(__dirname, 'assets', 'index.css')} />
         {this.state.login ? this.renderChat() : this.renderLogin()}
       </form>
     )
