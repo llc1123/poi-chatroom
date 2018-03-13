@@ -50,10 +50,10 @@ export const reactClass = connect(
   }
 
   sendMessage() {
-    if (this.state.input !== '') {
+    if (/\S/.test(this.state.input)) {
       socket.emit('new message', this.state.input)
-      this.setState({ input: '' })
     }
+    this.setState({ input: '' })
   }
 
   handleLogin() {
