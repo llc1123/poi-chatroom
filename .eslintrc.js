@@ -50,6 +50,7 @@ module.exports = {
       'react-dom',
       'redux',
       'semver',
+      'prop-types',
     ],
   },
 }

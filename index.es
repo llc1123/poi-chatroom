@@ -1,10 +1,12 @@
 /* eslint-disable no-underscore-dangle */
 
+import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { join } from 'path-extra'
+import { get } from 'lodash'
 import { connect } from 'react-redux'
 import { Button, FormGroup, FormControl, InputGroup, Panel, Label } from 'react-bootstrap'
-import openSocket from 'socket.io-client'
+import openSocket from './assets/socket.io.slim'
 
 const host = 'jp3.llc.moe'
 const port = 3000
@@ -12,22 +14,25 @@ const socket = openSocket(`http://${host}:${port}`)
 const { i18n } = window
 const __ = i18n['poi-plugin-chatroom'].__.bind(i18n['poi-plugin-chatroom'])
 
+
 export const reactClass = connect(
-  () => (state, props) => ({
-    nickname: state.info.basic.api_nickname,
-    server: state.info.server.name,
+  state => ({
+    nickname: get(state, 'info.basic.api_nickname', null),
+    server: get(state, 'info.server.name', null),
   })
 )(class Chatroom extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      messages: [],
-      input: '',
-      username: '',
-      realname: `${props.nickname}@${props.server}` === 'undefined@null' ? __('Anonymous') : `${props.nickname}@${props.server}`,
-      login: false,
-      numUsers: 0,
-    }
+  static propTypes = {
+    nickname: PropTypes.string.isRequired,
+    server: PropTypes.string.isRequired,
+  }
+
+  state = {
+    messages: [],
+    input: '',
+    username: '',
+    realname: this.props.nickname && this.props.server ? `${this.props.nickname}@${this.props.server}` : __('Anonymous'),
+    login: false,
+    numUsers: 0,
   }
 
   componentDidMount() {
