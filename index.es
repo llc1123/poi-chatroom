@@ -14,12 +14,11 @@ const port = 3000
 const socket = openSocket(`http://${host}:${port}`)
 
 @translate()
-export const reactClass = connect(
-  state => ({
-    nickname: get(state, 'info.basic.api_nickname', null),
-    server: get(state, 'info.server.name', null),
-  })
-)(class Chatroom extends Component {
+@connect(state => ({
+  nickname: get(state, 'info.basic.api_nickname', null),
+  server: get(state, 'info.server.name', null),
+}))
+export class reactClass extends Component {
   static propTypes = {
     nickname: PropTypes.string.isRequired,
     server: PropTypes.string.isRequired,
@@ -31,7 +30,7 @@ export const reactClass = connect(
       messages: [],
       input: '',
       username: '',
-      realname: props.nickname && props.server ? `${props.nickname}@${props.server}` : t('Anonymous'),
+      realname: props.nickname && props.server ? `${props.nickname}@${props.server}` : t('poi-plugin-chatroom:Anonymous'),
       login: false,
       numUsers: 0,
     }
@@ -145,7 +144,7 @@ export const reactClass = connect(
           onChange={event => this.setState({ username: event.target.value })}
           placeholder={this.state.realname}
         />
-        <Button type="submit" onClick={() => this.handleLogin()}>{t('Login')}</Button>
+        <Button type="submit" onClick={() => this.handleLogin()}>{t('poi-plugin-chatroom:Login')}</Button>
       </FormGroup>
     )
   }
@@ -158,4 +157,4 @@ export const reactClass = connect(
       </form>
     )
   }
-})
+}
