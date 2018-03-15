@@ -6,15 +6,14 @@ import { join } from 'path-extra'
 import { get } from 'lodash'
 import { connect } from 'react-redux'
 import { Button, FormGroup, FormControl, InputGroup, Panel, Label } from 'react-bootstrap'
+import { translate } from 'react-i18next'
 import openSocket from './assets/socket.io.slim'
 
-const host = 'jp3.llc.moe'
+const host = 'localhost'
 const port = 3000
 const socket = openSocket(`http://${host}:${port}`)
-const { i18n } = window
-const __ = i18n['poi-plugin-chatroom'].__.bind(i18n['poi-plugin-chatroom'])
 
-
+@translate()
 export const reactClass = connect(
   state => ({
     nickname: get(state, 'info.basic.api_nickname', null),
@@ -25,16 +24,19 @@ export const reactClass = connect(
     nickname: PropTypes.string.isRequired,
     server: PropTypes.string.isRequired,
   }
-
-  state = {
-    messages: [],
-    input: '',
-    username: '',
-    realname: this.props.nickname && this.props.server ? `${this.props.nickname}@${this.props.server}` : __('Anonymous'),
-    login: false,
-    numUsers: 0,
+  constructor(props){
+    super(props)
+    const { t } = props
+    this.state = {
+      messages: [],
+      input: '',
+      username: '',
+      realname: props.nickname && props.server ? `${props.nickname}@${props.server}` : t('Anonymous'),
+      login: false,
+      numUsers: 0,
+    }
   }
-
+  
   componentDidMount() {
     socket.on('login', numUsers => this.setState({ login: true, numUsers }))
     socket.on('new message', (data) => {
@@ -51,11 +53,11 @@ export const reactClass = connect(
     })
   }
 
-
   componentWillUnmount() {
     socket.off('login')
     socket.off('new message')
     socket.off('self message')
+    socket.disconnect()
   }
 
   sendMessage() {
@@ -133,6 +135,7 @@ export const reactClass = connect(
   }
 
   renderLogin() {
+    const { t } = this.props
     return (
       <FormGroup id="chatroom-login">
         <FormControl
@@ -142,7 +145,7 @@ export const reactClass = connect(
           onChange={event => this.setState({ username: event.target.value })}
           placeholder={this.state.realname}
         />
-        <Button type="submit" onClick={() => this.handleLogin()}>{__('Login')}</Button>
+        <Button type="submit" onClick={() => this.handleLogin()}>{t('Login')}</Button>
       </FormGroup>
     )
   }

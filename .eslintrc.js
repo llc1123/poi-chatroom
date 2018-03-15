@@ -5,27 +5,37 @@ module.exports = {
     'node': true,
   },
   'extends': [
-    "airbnb",
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:import/errors',
+    'plugin:import/warnings',
   ],
+  'parserOptions': {
+    'ecmaVersion': 7,
+    'ecmaFeatures': {
+      'experimentalObjectRestSpread': true,
+      'jsx': true,
+    },
+    'sourceType': 'module',
+  },
   'parser': 'babel-eslint',
   'plugins': [
     'import',
     'react',
   ],
-  'globals': {
-    'html2canvas': false,
-    'config': true,
-  },
   'rules': {
-		'semi': ['error', 'never'],
-		'import/no-unresolved': [2, { 'ignore': ['views/.*'] }],
-    'react/jsx-filename-extension': 'off',
-    'no-underscore-dangle': ['error', { 'allowAfterThis': true }],
-    'import/extensions': ['error', { 'es': 'never' }],
-    'import/no-extraneous-dependencies': 'off',
-    'import/prefer-default-export': 'off',
     'comma-dangle': ['error', 'always-multiline'],
-    'no-confusing-arrow': ['error', {'allowParens': true}],
+    'indent': ['warn', 2],
+    'linebreak-style': ['error', 'unix'],
+    'no-console': ['warn', {'allow': ['warn', 'error']}],
+    'no-var': 'error',
+    'no-unused-vars': ['warn', {'args': 'none'}],
+    'semi': ['error', 'never'],
+    'unicode-bom': 'error',
+    'prefer-const': ['error', {'destructuring': 'all'}],
+    'react/prop-types': [0],
+    'no-irregular-whitespace': ['error', {'skipStrings': true, 'skipTemplates': true}],
+    'import/no-named-as-default-member': [0],
   },
   'settings': {
     'import/resolver': {
@@ -51,6 +61,7 @@ module.exports = {
       'redux',
       'semver',
       'prop-types',
+      'react-i18next',
     ],
   },
 }
